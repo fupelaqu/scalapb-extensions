@@ -65,18 +65,32 @@ val json4s = Seq(
   "org.json4s" %% "json4s-ext"     % Versions.json4s
 ).map(_.excludeAll(jacksonExclusions: _*)) ++ jackson
 
-val akkaHttp: Seq[ModuleID] = Seq(
-  "com.typesafe.akka" %% "akka-http" % Versions.akkaHttp,
-  "de.heikoseeberger" %% "akka-http-json4s" % Versions.akkaHttpJson4s,
-  "com.typesafe.akka" %% "akka-http-testkit" % Versions.akkaHttp % Test
+val logging = Seq(
+  "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging,
+  "org.log4s"                  %% "log4s"         % Versions.log4s,
+  "org.slf4j"                  % "slf4j-api"      % Versions.slf4j,
+  "org.slf4j"                  % "jcl-over-slf4j" % Versions.slf4j,
+  "org.slf4j"                  % "jul-to-slf4j"   % Versions.slf4j
+)
+
+val logback = Seq(
+  "ch.qos.logback" % "logback-classic"  % Versions.logback,
+  "org.slf4j"      % "log4j-over-slf4j" % Versions.slf4j
+)
+
+val scalatest = Seq(
+  "org.scalatest"          %% "scalatest"  % Versions.scalatest  % Test,
+  "org.scalacheck"         %% "scalacheck" % Versions.scalacheck % Test
 )
 
 libraryDependencies in ThisBuild ++=
   Seq(
     "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
   ) ++
-  akkaHttp ++
-  json4s
+  json4s ++
+  logging ++
+  logback ++
+  scalatest
 
 lazy val root = project.in(file("."))
   .configs(IntegrationTest)
