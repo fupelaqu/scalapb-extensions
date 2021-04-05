@@ -21,17 +21,17 @@ addCommandAlias("pl", ";clean;publishLocal") // clean and publish locally
 
 addCommandAlias("pr", ";clean;publish") // clean and publish globally
 
-shellPrompt in ThisBuild := prompt
+shellPrompt := prompt
 
 organization := "app.softnetwork.protobuf"
 
 name := "scalapb-extensions"
 
-version in ThisBuild := "0.1-SNAPSHOT"
+version := "0.1.1"
 
-scalaVersion in ThisBuild := "2.12.11"
+scalaVersion := "2.12.11"
 
-scalacOptions in ThisBuild ++= Seq("-deprecation", "-feature")
+scalacOptions ++= Seq("-deprecation", "-feature")
 
 parallelExecution in Test := false
 
@@ -41,11 +41,9 @@ val pbSettings = Seq(
   )
 )
 
-resolvers in ThisBuild ++= Seq(
-  Resolver.bintrayRepo("cakesolutions", "maven"),
-  Resolver.bintrayRepo("hseeberger", "maven"),
-  Resolver.sonatypeRepo("releases"),
-  "krasserm at bintray" at "http://dl.bintray.com/krasserm/maven"
+resolvers ++= Seq(
+  "Maven Central Server" at "https://repo1.maven.org/maven2",
+  "Typesafe Server" at "https://repo.typesafe.com/typesafe/releases"
 )
 
 val jacksonExclusions = Seq(
@@ -83,7 +81,7 @@ val scalatest = Seq(
   "org.scalacheck"         %% "scalacheck" % Versions.scalacheck % Test
 )
 
-libraryDependencies in ThisBuild ++=
+libraryDependencies ++=
   Seq(
     "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
   ) ++
