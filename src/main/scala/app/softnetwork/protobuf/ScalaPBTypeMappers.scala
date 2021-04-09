@@ -1,6 +1,6 @@
 package app.softnetwork.protobuf
 
-import java.time.Instant
+import java.time.{Instant, LocalDateTime, ZoneOffset}
 
 import com.google.protobuf.timestamp.Timestamp
 
@@ -26,6 +26,22 @@ trait TimestampTypeMappers {
   implicit val timestamp2InstantTypeMapper: TypeMapper[Timestamp, Instant] = new TypeMapper[Timestamp, Instant] {
     override def toBase(custom: Instant): Timestamp = custom
     override def toCustom(base: Timestamp): Instant = base
+  }
+
+  implicit def timestamp2LocalDateTime(timestamp: Timestamp): LocalDateTime = {
+    LocalDateTime.ofEpochSecond(
+      timestamp.seconds,
+      timestamp.nanos,
+      ZoneOffset.UTC
+    )
+  }
+  implicit def localDateTime2Timestamp(localDateTime: LocalDateTime): Timestamp = {
+    Timestamp(localDateTime.getSecond, localDateTime.getNano)
+  }
+
+  implicit val timestamp2LocalDateTimeTypeMapper: TypeMapper[Timestamp, LocalDateTime] = new TypeMapper[Timestamp, LocalDateTime] {
+    override def toBase(custom: LocalDateTime): Timestamp = custom
+    override def toCustom(base: Timestamp): LocalDateTime = base
   }
 
 }
