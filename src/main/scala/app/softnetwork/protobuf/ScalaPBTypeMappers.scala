@@ -1,6 +1,6 @@
 package app.softnetwork.protobuf
 
-import java.time.{Instant, LocalDateTime, ZoneOffset}
+import java.time.{Instant, LocalDateTime, ZonedDateTime, ZoneId, ZoneOffset}
 
 import com.google.protobuf.timestamp.Timestamp
 
@@ -29,10 +29,12 @@ trait TimestampTypeMappers {
   }
 
   implicit def timestamp2LocalDateTime(timestamp: Timestamp): LocalDateTime = {
-    LocalDateTime.ofEpochSecond(
-      timestamp.seconds,
-      timestamp.nanos,
-      ZoneOffset.UTC
+    LocalDateTime.ofInstant(
+      Instant.ofEpochSecond(
+        timestamp.seconds,
+        timestamp.nanos
+      ),
+      ZoneOffset.of(ZoneId.systemDefault().getId())
     )
   }
   implicit def localDateTime2Timestamp(localDateTime: LocalDateTime): Timestamp = {
@@ -42,6 +44,24 @@ trait TimestampTypeMappers {
   implicit val timestamp2LocalDateTimeTypeMapper: TypeMapper[Timestamp, LocalDateTime] = new TypeMapper[Timestamp, LocalDateTime] {
     override def toBase(custom: LocalDateTime): Timestamp = custom
     override def toCustom(base: Timestamp): LocalDateTime = base
+  }
+
+  implicit def timestamp2ZonedDateTime(timestamp: Timestamp): ZonedDateTime = {
+    ZonedDateTime.ofInstant(
+      Instant.ofEpochSecond(
+        timestamp.seconds,
+        timestamp.nanos
+      ),
+      ZoneOffset.of(ZoneId.systemDefault().getId())
+    )
+  }
+  implicit def zonedDateTime2Timestamp(zonedDateTime: ZonedDateTime): Timestamp = {
+    Timestamp(zonedDateTime.getSecond, zonedDateTime.getNano)
+  }
+
+  implicit val timestamp2ZonedDateTimeTypeMapper: TypeMapper[Timestamp, ZonedDateTime] = new TypeMapper[Timestamp, ZonedDateTime] {
+    override def toBase(custom: ZonedDateTime): Timestamp = custom
+    override def toCustom(base: Timestamp): ZonedDateTime = base
   }
 
 }
