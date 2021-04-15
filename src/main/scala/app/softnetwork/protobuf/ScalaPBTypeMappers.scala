@@ -1,6 +1,6 @@
 package app.softnetwork.protobuf
 
-import java.time.{Instant, LocalDateTime, ZonedDateTime, ZoneId, ZoneOffset}
+import java.time.{Instant, LocalDateTime, ZonedDateTime, ZoneId}
 
 import com.google.protobuf.timestamp.Timestamp
 
@@ -34,7 +34,7 @@ trait TimestampTypeMappers {
         timestamp.seconds,
         timestamp.nanos
       ),
-      ZoneOffset.of(ZoneId.systemDefault().getId())
+      ZoneId.systemDefault()
     )
   }
   implicit def localDateTime2Timestamp(localDateTime: LocalDateTime): Timestamp = {
@@ -52,7 +52,7 @@ trait TimestampTypeMappers {
         timestamp.seconds,
         timestamp.nanos
       ),
-      ZoneOffset.of(ZoneId.systemDefault().getId())
+      ZoneId.systemDefault()
     )
   }
   implicit def zonedDateTime2Timestamp(zonedDateTime: ZonedDateTime): Timestamp = {

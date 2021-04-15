@@ -27,7 +27,7 @@ organization := "app.softnetwork.protobuf"
 
 name := "scalapb-extensions"
 
-version := "0.1.2"
+version := "0.1.2.1"
 
 scalaVersion := "2.12.11"
 
