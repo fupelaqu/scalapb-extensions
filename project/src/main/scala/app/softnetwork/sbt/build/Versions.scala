@@ -6,16 +6,4 @@ object Versions {
 
   val json4s = "3.6.7"
 
-  val scalaLogging = "3.9.2"
-
-  val logback = "1.1.7"
-
-  val slf4j = "1.7.30"
-
-  val log4s = "1.8.2"
-
-  val scalatest = "3.1.1"
-
-  val scalacheck = "1.13.4"
-
 }

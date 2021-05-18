@@ -27,7 +27,7 @@ organization := "app.softnetwork.protobuf"
 
 name := "scalapb-extensions"
 
-version := "0.1.2.1"
+version := "0.1.3"
 
 scalaVersion := "2.12.11"
 
@@ -63,34 +63,12 @@ val json4s = Seq(
   "org.json4s" %% "json4s-ext"     % Versions.json4s
 ).map(_.excludeAll(jacksonExclusions: _*)) ++ jackson
 
-val logging = Seq(
-  "com.typesafe.scala-logging" %% "scala-logging" % Versions.scalaLogging,
-  "org.log4s"                  %% "log4s"         % Versions.log4s,
-  "org.slf4j"                  % "slf4j-api"      % Versions.slf4j,
-  "org.slf4j"                  % "jcl-over-slf4j" % Versions.slf4j,
-  "org.slf4j"                  % "jul-to-slf4j"   % Versions.slf4j
-)
-
-val logback = Seq(
-  "ch.qos.logback" % "logback-classic"  % Versions.logback,
-  "org.slf4j"      % "log4j-over-slf4j" % Versions.slf4j
-)
-
-val scalatest = Seq(
-  "org.scalatest"          %% "scalatest"  % Versions.scalatest  % Test,
-  "org.scalacheck"         %% "scalacheck" % Versions.scalacheck % Test
-)
-
 libraryDependencies ++=
   Seq(
     "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
-  ) ++
-  json4s ++
-  logging ++
-  logback ++
-  scalatest
+  ) ++ json4s
 
 lazy val root = project.in(file("."))
   .configs(IntegrationTest)
-  .settings(Defaults.itSettings, BuildInfoSettings.settings, pbSettings)
-  .enablePlugins(JavaAppPackaging, BuildInfoPlugin)
+  .settings(Defaults.itSettings, pbSettings)
+  .enablePlugins(JavaAppPackaging)
