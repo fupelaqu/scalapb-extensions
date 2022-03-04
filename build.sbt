@@ -27,16 +27,16 @@ organization := "app.softnetwork.protobuf"
 
 name := "scalapb-extensions"
 
-version := "0.1.3"
+version := "0.1.4"
 
 scalaVersion := "2.12.11"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
-parallelExecution in Test := false
+Test / parallelExecution := false
 
 val pbSettings = Seq(
-  PB.targets in Compile := Seq(
+  Compile / PB.targets := Seq(
     scalapb.gen() -> crossTarget.value / "protobuf_managed/main"
   )
 )
