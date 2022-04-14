@@ -1,6 +1,9 @@
+.bloop
 .idea
 *.iml
 target
 *.diff
 .metals
 .vscode
+.travis.yml
+metals.sbt

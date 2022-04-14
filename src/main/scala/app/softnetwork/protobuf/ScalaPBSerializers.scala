@@ -17,7 +17,7 @@ object ScalaPBSerializers {
 
     import JsonDSL._
 
-    lazy val EnumerationClass = m.runtimeClass
+    lazy val EnumerationClass: Class[_] = m.runtimeClass
 
     override def deserialize(implicit format: Formats): PartialFunction[(TypeInfo, JValue), T] = {
       case (_@TypeInfo(EnumerationClass, _), json) if isValid(json) =>
