@@ -1,6 +1,6 @@
 package app.softnetwork.protobuf
 
-import java.time.{Instant, LocalDateTime, ZonedDateTime, ZoneId}
+import java.time.{Instant, LocalDateTime, ZoneId, ZonedDateTime}
 import java.util.Date
 
 import com.google.protobuf.timestamp.Timestamp
@@ -8,8 +8,7 @@ import com.google.protobuf.timestamp.Timestamp
 import scala.language.implicitConversions
 import scalapb.TypeMapper
 
-/**
-  * Created by smanciot on 02/04/2021.
+/** Created by smanciot on 02/04/2021.
   */
 object ScalaPBTypeMappers extends TimestampTypeMappers
 
@@ -24,10 +23,11 @@ trait TimestampTypeMappers {
       timestamp.nanos
     )
 
-  implicit val timestamp2InstantTypeMapper: TypeMapper[Timestamp, Instant] = new TypeMapper[Timestamp, Instant] {
-    override def toBase(custom: Instant): Timestamp = custom
-    override def toCustom(base: Timestamp): Instant = base
-  }
+  implicit val timestamp2InstantTypeMapper: TypeMapper[Timestamp, Instant] =
+    new TypeMapper[Timestamp, Instant] {
+      override def toBase(custom: Instant): Timestamp = custom
+      override def toCustom(base: Timestamp): Instant = base
+    }
 
   implicit def timestamp2LocalDateTime(timestamp: Timestamp): LocalDateTime = {
     LocalDateTime.ofInstant(
@@ -42,10 +42,11 @@ trait TimestampTypeMappers {
     Timestamp(localDateTime.getSecond, localDateTime.getNano)
   }
 
-  implicit val timestamp2LocalDateTimeTypeMapper: TypeMapper[Timestamp, LocalDateTime] = new TypeMapper[Timestamp, LocalDateTime] {
-    override def toBase(custom: LocalDateTime): Timestamp = custom
-    override def toCustom(base: Timestamp): LocalDateTime = base
-  }
+  implicit val timestamp2LocalDateTimeTypeMapper: TypeMapper[Timestamp, LocalDateTime] =
+    new TypeMapper[Timestamp, LocalDateTime] {
+      override def toBase(custom: LocalDateTime): Timestamp = custom
+      override def toCustom(base: Timestamp): LocalDateTime = base
+    }
 
   implicit def timestamp2ZonedDateTime(timestamp: Timestamp): ZonedDateTime = {
     ZonedDateTime.ofInstant(
@@ -57,25 +58,27 @@ trait TimestampTypeMappers {
     )
   }
   implicit def zonedDateTime2Timestamp(zonedDateTime: ZonedDateTime): Timestamp = {
-    Timestamp(zonedDateTime.getSecond, zonedDateTime.getNano)
+    val instant = zonedDateTime.toInstant
+    Timestamp(instant.getEpochSecond, instant.getNano)
   }
 
-  implicit val timestamp2ZonedDateTimeTypeMapper: TypeMapper[Timestamp, ZonedDateTime] = new TypeMapper[Timestamp, ZonedDateTime] {
-    override def toBase(custom: ZonedDateTime): Timestamp = custom
-    override def toCustom(base: Timestamp): ZonedDateTime = base
-  }
+  implicit val timestamp2ZonedDateTimeTypeMapper: TypeMapper[Timestamp, ZonedDateTime] =
+    new TypeMapper[Timestamp, ZonedDateTime] {
+      override def toBase(custom: ZonedDateTime): Timestamp = custom
+      override def toCustom(base: Timestamp): ZonedDateTime = base
+    }
 
   implicit def date2Timestamp(date: Date): Timestamp = {
-    val instant = Instant.ofEpochMilli(date.getTime)
+    val instant = date.toInstant
     Timestamp(instant.getEpochSecond, instant.getNano)
   }
 
   implicit def timestamp2Date(timestamp: Timestamp): Date =
-    new Date(
+    Date.from(
       Instant.ofEpochSecond(
         timestamp.seconds,
         timestamp.nanos
-      ).toEpochMilli
+      )
     )
 
   implicit val tsTypeMapper: TypeMapper[Timestamp, Date] = new TypeMapper[Timestamp, Date] {
