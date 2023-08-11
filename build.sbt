@@ -1,45 +1,18 @@
 import sbt.Resolver
 
-import Common._
-import app.softnetwork.sbt.build._
-
-/////////////////////////////////
-// Defaults
-/////////////////////////////////
-
-app.softnetwork.sbt.build.Publication.settings
-
-/////////////////////////////////
-// Useful aliases
-/////////////////////////////////
-
-addCommandAlias("cd", "project") // navigate the projects
-
-addCommandAlias("cc", ";clean;compile") // clean and compile
-
-addCommandAlias("pl", ";clean;publishLocal") // clean and publish locally
-
-addCommandAlias("pr", ";clean;publish") // clean and publish globally
-
-shellPrompt := prompt
+import app.softnetwork.*
 
 organization := "app.softnetwork.protobuf"
 
 name := "scalapb-extensions"
 
-version := "0.1.7"
+version := "0.1.8"
 
-scalaVersion := "2.12.11"
+scalaVersion := "2.12.18"
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
 Test / parallelExecution := false
-
-val pbSettings = Seq(
-  Compile / PB.targets := Seq(
-    scalapb.gen() -> crossTarget.value / "protobuf_managed/main"
-  )
-)
 
 resolvers ++= Seq(
   "Maven Central Server" at "https://repo1.maven.org/maven2",
@@ -63,12 +36,9 @@ val json4s = Seq(
   "org.json4s" %% "json4s-ext"     % Versions.json4s
 ).map(_.excludeAll(jacksonExclusions: _*)) ++ jackson
 
-libraryDependencies ++=
-  Seq(
-    "com.thesamet.scalapb" %% "scalapb-runtime" % scalapb.compiler.Version.scalapbVersion % "protobuf"
-  ) ++ json4s
+libraryDependencies ++= json4s
 
 lazy val root = project.in(file("."))
   .configs(IntegrationTest)
-  .settings(Defaults.itSettings, pbSettings)
+  .settings(Defaults.itSettings, Protoc.protocSettings)
   .enablePlugins(JavaAppPackaging)

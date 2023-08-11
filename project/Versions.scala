@@ -1,5 +1,3 @@
-package app.softnetwork.sbt.build
-
 object Versions {
 
   val jackson = "2.12.7"
